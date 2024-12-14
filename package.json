@@ -1,7 +1,7 @@
 {
   "name": "eesy",
   "version": "0.1.0",
-  "homepage": "https://mettihew.github.io/eesy.ir",
+  "homepage": "https://mettihew.github.io/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",

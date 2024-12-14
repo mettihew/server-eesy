@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react'
 import {Button, Spinner} from "react-bootstrap"
 import * as yup from "yup"
 import {useFormik} from "formik"
-import {useDispatch} from "react-redux"
-import { register } from "../features/user/userSlice"
 import {ToastContainer, toast} from "react-toastify"
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 function Register() {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [Spin, setSpin] = useState(false)
 
@@ -31,7 +29,8 @@ function Register() {
     onSubmit: async (values) => {
       setSpin(true)
       if (values.password === values.password2){
-       await dispatch(register(values))
+        axios.post(`${URL}/user/register`, {values})
+      //  await dispatch(register(values))
        setSpin(false)
       }else{
         toast.error("Your password is not match")

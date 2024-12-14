@@ -1,7 +1,6 @@
 
 import { Link} from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { BsSearch } from "react-icons/bs";
 import compare from "../images/compare.svg";
@@ -21,15 +20,12 @@ function Header() {
   let cat;
   const arr = search.split("&");
   for (let k in arr) {
-    if (arr[k].includes("k")) key = arr[k].split("=")[1];
-    if (arr[k].includes("cat")) cat = arr[k].split("=")[1];
+    if (arr[k].includes("k=")) key = arr[k].split("=")[1];
+    if (arr[k].includes("cat=")) cat = arr[k].split("=")[1];
   }
-
   const [category, setCategory] = useState(cat);
-  const [type, setType] = useState(key);
+  const [type, setType] = useState(key);  
 
-
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   let data;
   let search2;
@@ -73,6 +69,7 @@ function Header() {
   return (
     <div className="header">
 
+
 <div className="header-line1 py-3 container-fluid">
 
       {/* input */}
@@ -85,9 +82,10 @@ function Header() {
           <option value={"refrigerator"}>Refrigerator</option>
           <option value={"dishwasher"}>Dishwasher</option>
           <option value={"microwave"}>Microwave</option>
+          <option value={"ice-maker"}>Ice Maker</option>
         </select>
        
-            <input ref={inpFocus} onFocus={() => setToGray("black")} onBlur={() => setToGray("gray")} defaultValue={type} style={{ color: gray }} className="header-search-input p-2" type="text" placeholder="Search.." onChange={(ev) => setType(ev.target.value)} />
+            <input ref={inpFocus} onFocus={() => setToGray("black")} onBlur={() => setToGray("gray")} defaultValue={key} style={{ color: gray }} className="header-search-input p-2" type="text" placeholder="Search.." onChange={(ev) => setType(ev.target.value)} />
             <div className="input-group-text" onClick={goHandler}><BsSearch /></div>
           </div>
         </div>

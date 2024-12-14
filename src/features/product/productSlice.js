@@ -3,15 +3,15 @@ import axios from 'axios'
 import { URL  } from '../../utils/URL'
 import { toast } from 'react-toastify'
 
-export const searchS = createAsyncThunk('search', async(query, thunk) => {
-  try {
-    const res = await axios.post(`${URL}/product/s${query}`)
-    return res.data
-  } catch (error) {
-    // thunk.rejectWithValue(error)
-throw new Error(error)
-  }
-})
+// export const searchS = createAsyncThunk('search', async(query, thunk) => {
+//   try {
+//     const res = await axios.post(`${URL}/product/s${query}`)
+//     return res.data
+//   } catch (error) {
+//     // thunk.rejectWithValue(error)
+// throw new Error(error)
+//   }
+// })
 
 export const getProducts = createAsyncThunk('get-products', async( thunk) => {
   try {
@@ -100,21 +100,21 @@ export const productSlice = createSlice({
   builder
 
 
-  .addCase(searchS.pending ,state => {
-    state.isLoading= true;
-  })
-  .addCase(searchS.fulfilled ,(state, action) => {
-    state.isLoading= false;
-    state.isError = false;
-    state.isSuccess= true;
-    state.products = action.payload
-  })
-  .addCase(searchS.rejected ,state => {
-   state.isLoading= false;
-   state.isSuccess= false;
-   state.isError= true;
-   state.error = true
-  })
+  // .addCase(searchS.pending ,state => {
+  //   state.isLoading= true;
+  // })
+  // .addCase(searchS.fulfilled ,(state, action) => {
+  //   state.isLoading= false;
+  //   state.isError = false;
+  //   state.isSuccess= true;
+  //   state.products = action.payload
+  // })
+  // .addCase(searchS.rejected ,state => {
+  //  state.isLoading= false;
+  //  state.isSuccess= false;
+  //  state.isError= true;
+  //  state.error = true
+  // })
 
  
 

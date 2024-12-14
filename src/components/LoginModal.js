@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
 import {useRef} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { FaHeart, FaUser } from 'react-icons/fa'
-import { login } from '../features/user/userSlice'
 import wish from "../images/wish.svg";
 
 const style = {
@@ -25,7 +23,6 @@ export default function LoginModal(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const dispatch = useDispatch()
   const emailRef = useRef()
   const passwordRef = useRef()
 
@@ -34,7 +31,7 @@ const {name} = props
 const loginHandler = () => {
   const email = emailRef.current.value
   const password = passwordRef.current.value
-  dispatch(login({email, password}));
+  // dispatch(login({email, password}));
 }
 
   return (

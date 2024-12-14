@@ -3,41 +3,18 @@ import wish from "../images/wish.svg";
 import view from "../images/view.svg";
 import prodcompare from "../images/prodcompare.svg";
 import addCart from "../images/add-cart.svg";
-import { useDispatch } from "react-redux";
-import ReactStars from "react-rating-stars-component";
 import { useState } from "react";
-import { favoriteS } from "../features/user/userSlice";
 import LoginModal from './LoginModal'
 import { FaHeart } from "react-icons/fa";
 
 function ProductCard(props) {
-  const [active, setActive] = useState(wish);
-
-  const dispatch = useDispatch();
   let location = useLocation();
   const navigate = useNavigate();
   const { grid } = props;
   const user = JSON.parse(localStorage.getItem('user'))
 
-  // console.log(props.rating);
-  const rate = [3, 4, 1, 1, 5]
-  // const rate = props.rating
-  let sum = 0
-  let max = 0
-  let star = 0
-  let percent = 0
-  for (let key in rate) {
-    sum += rate[key]
-    max += 5
-  }
-  star = sum / rate.length
-  percent = (sum / max) * 100
-  percent = percent.toFixed(0)
-
-  // console.log(sum, max, star, percent);
-
   const addToWishHandler = (id) => {
-    dispatch(favoriteS({ productId: id, userId: user._id }));
+    // dispatch(favoriteS({ productId: id, userId: user._id }));
   };
 
 // console.log(user.list);
@@ -80,8 +57,8 @@ function ProductCard(props) {
             <h5 className="brand">{props.name}</h5>
 
             <div id="a-c">
-              <p className="text-info" style={{ marginBottom: '5px' }}>{star}</p>
-              <ReactStars count={5} size={20} activeColor="#ffd700" value={star} edit={false}  />
+              {/* <p className="text-info" style={{ marginBottom: '5px' }}>{star}</p> */}
+              {/* <ReactStars count={5} size={20} activeColor="#ffd700" value={star} edit={false}  /> */}
             </div>
 
             <p className={`description ${grid === 12 ? "d-block" : "d-none"}`}></p>

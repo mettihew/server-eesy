@@ -29,7 +29,7 @@ function LeftMenuProducts(props) {
 
     // console.log("key=",key, "sort=", sort, "cat=", cat, "minPrice=", minPrice, "maxPrice=", maxPrice);
 const goHandler = (ev) => {
-        const {minPrice, maxPrice} = ev
+        // const {minPrice, maxPrice} = ev
     
     if(!sort && !minPrice) return
     

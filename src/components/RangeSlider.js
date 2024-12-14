@@ -59,7 +59,7 @@ export default function CustomizedSlider(props) {
   let min = props.min
   let max = props.max
   if (!min) min = 5
-  if (!max) max = 100
+  if (!max) max = 200
   const [value, setValue] = React.useState([min, max]);
 
   const handleChange = (ev, newValue) => {
@@ -81,7 +81,7 @@ export default function CustomizedSlider(props) {
         <h4>${value[0]}</h4>
         <h4> &nbsp; -- &nbsp;</h4>
         <h4>${value[1]}</h4>
-        {value[1] === 100 && <h4>+</h4>}
+        {value[1] === 200 && <h4>+</h4>}
       </div>
 
       <form onSubmit={goHandler}>
@@ -95,6 +95,7 @@ export default function CustomizedSlider(props) {
         }
         defaultValue={value}
         onChange={handleChange}
+        max={max}
       />
     </Box>
   );

@@ -2,13 +2,10 @@ import React, { useState } from 'react'
 import { Button } from "react-bootstrap"
 import * as yup from "yup"
 import { useFormik } from "formik"
-import { useDispatch } from "react-redux"
-import { login } from "../features/user/userSlice"
 import { ToastContainer } from 'react-toastify'
 import { Spinner } from 'react-bootstrap'
 
 function Login() {
-  const dispatch = useDispatch()
   const [spinner, setSpinner] = useState(false)
 
   const user = JSON.parse(localStorage.getItem('user'))
@@ -26,7 +23,7 @@ function Login() {
     validationSchema: schema,
     onSubmit: (v) => {
       setSpinner(true)
-      dispatch(login(v))
+      // dispatch(login(v))
     }
   })
 
