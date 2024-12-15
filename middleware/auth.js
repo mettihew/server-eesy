@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+const jwt = require('jsonwebtoken')
 
 
 const verifyToken = (req, res, next) => {
@@ -13,4 +13,4 @@ const verifyToken = (req, res, next) => {
   return next()
 };
 
-export default verifyToken;
+module.exports = verifyToken
