@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import digi_banner from '../images/digi_banner.gif'
-// import watch from '../images/watch.jpg'
-import tv from '../images/tv.jpg'
-// import headphone from '../images/headphone.jpg'
-// import camera from '../images/camera.jpg'
 import brand1 from '../images/brand-01.png'
 import brand2 from '../images/brand-02.png'
 import brand3 from '../images/brand-03.png'

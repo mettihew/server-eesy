@@ -4,10 +4,12 @@ import * as yup from "yup"
 import { useFormik } from "formik"
 import { ToastContainer } from 'react-toastify'
 import { Spinner } from 'react-bootstrap'
+// import axios from 'axios'
+import { URL } from "../utils/URL";
+import axios  from 'axios'
 
 function Login() {
   const [spinner, setSpinner] = useState(false)
-
   const user = JSON.parse(localStorage.getItem('user'))
 
   const schema = yup.object({
@@ -23,7 +25,11 @@ function Login() {
     validationSchema: schema,
     onSubmit: (v) => {
       setSpinner(true)
-      // dispatch(login(v))
+      axios.post(`${URL}/login`, v)
+      .then((res) => {
+          localStorage.setItem('user', JSON.stringify(res.data))
+          window.location.reload()} )
+      .catch(() => alert('problem'))
     }
   })
 

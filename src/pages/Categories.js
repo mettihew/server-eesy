@@ -17,7 +17,6 @@ function Categories() {
           <a href={`/category?cat=refrigerator`}><h6> Explore now </h6></a>
         </div>
 
-
         <div className='body-box' >
           <h5>Dishwasher</h5>
           <img src={"https://dkstatics-public.digikala.com/digikala-products/6ee2bdf01852e97b46b9a01be7a1465e5714bcee_1702881396.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90"} alt='box' />

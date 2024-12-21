@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { URL } from "../utils/URL";
 import axios from "axios";
 
-function CompareProduct() {
+function Favorite() {
   const [productState, setData] = useState()
   
   useEffect(() => {
   const user = JSON.parse(localStorage.getItem('user'))
     if (!user) return window.location.href = "/login"
-    const usercompare = user.compare
-    axios.post(`${URL}/get-compare`, usercompare)
+    const userfavorite = user.favorite
+    axios.post(`${URL}/get-favorite`, userfavorite)
     .then((res) => setData(res.data) )
     .catch(() => alert("somthing went wrong"))
   }, [])
@@ -64,4 +64,4 @@ function CompareProduct() {
   );
 }
 
-export default CompareProduct;
+export default Favorite;

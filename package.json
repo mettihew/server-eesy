@@ -1,12 +1,14 @@
 {
   "name": "eesy",
   "version": "0.1.0",
-  "homepage": "https://mettihew.github.io/",
+  "homepage": "https://mettihew.github.io",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.2.0",
     "@mui/joy": "^5.0.0-beta.48",
+    "@mui/lab": "^6.0.0-beta.19",
     "@mui/material": "^6.1.10",
     "@reduxjs/toolkit": "^2.4.0",
     "axios": "^1.7.5",

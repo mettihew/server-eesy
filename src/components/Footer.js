@@ -1,17 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BsLinkedin, BsYoutube, BsInstagram, BsGithub } from "react-icons/bs";
+import { BsLinkedin, BsYoutube, BsInstagram, BsGithub, BsSend } from "react-icons/bs";
 import { MdOutlineEmail } from "react-icons/md";
+import { Button } from '@mui/material';
+
 
 
 function Footer() {
   return (
     <>
-      <footer className="py-3">
+      <footer className="py-3  d-grid">
         <div className="container-xxl">
-          <div className="around">
+          <div className="around ">
             <div className="d-flex gap-10 align-items-center"><MdOutlineEmail size={"25px"}/><h6 className="mb-0 text-white">Stay in Contact </h6></div>
-            <div id="d-f"><input className="form-control py-" placeholder="Enter your email"/><button>Send</button></div>
+            <div id="d-f"><input className="form-control py-" placeholder="Enter your email"/><Button variant="contained" size="small" color="info">Submit <BsSend /></Button></div>
           </div>
         </div>
       </footer>

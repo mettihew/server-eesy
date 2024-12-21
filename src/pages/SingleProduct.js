@@ -4,12 +4,16 @@ import 'react-medium-image-zoom/dist/styles.css'
 import { useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
-import { FaAngleRight, t, FaAngleUp, FaHeart } from 'react-icons/fa'
+import { FaAngleRight, FaAngleUp, FaHeart } from 'react-icons/fa'
+import { FaCodeCompare } from "react-icons/fa6";
 import LoginModal from '../components/LoginModal'
 import ProductCard from "../components/ProductCard";
 import axios from "axios";
 import { URL } from "../utils/URL";
 import { FaAngleDoubleRight } from "react-icons/fa";
+import Fingerprint from '@mui/icons-material/Fingerprint';
+import IconButton from '@mui/material/IconButton';
+
 
 
 function SingleProduct() {
@@ -20,34 +24,63 @@ function SingleProduct() {
   const location = useLocation()
   const productId = location.pathname.split("/")[2]
   const [similar, setSimilar] = useState()
+  const [loading, setLoading] = useState(false)
 
   const [productState, setP] = useState(null)
   const user = JSON.parse(localStorage.getItem('user'))
 
   useEffect(() => {
+    if(!productState){
      axios.get(`${URL}/product/${productId}`)
     .then(res => setP(res.data))
     .catch(er => alert(er))
+    }
 
-    axios.post(`${URL}/home-cat`, {category: productState.category})
-   .then((res) => setSimilar(res.data))
-  }, [])
+    //similar 
+    if(productState){
+       axios.post(`${URL}/home-cat`, {category: productState.category})
+      .then((res) => setSimilar(res.data))
+    }
+  }, [productState])
 
 
   if (!productState) return <div id="j-c"> <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHN0eWxlPSItLWFuaW1hdGlvbi1zdGF0ZTogcnVubmluZzsiPgogICAgICA8c3R5bGU+CiAgICAgICAgOnJvb3QgewogICAgICAgICAgLS1hbmltYXRpb24tc3RhdGU6IHBhdXNlZDsKICAgICAgICB9CgogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgd2hlcmUgdGhlICJyZWd1bGFyIiBzY2hlbWUgaXMgZGFyayAqLwogICAgICAgIDpyb290IHsKICAgICAgICAgIC0tcHJpbWFyeTogI2Y5ZmJmYTsKICAgICAgICAgIC0tc2Vjb25kYXJ5OiAjMDAxZTJiOwogICAgICAgICAgLS10ZXJ0aWFyeTogIzAwZWQ2NDsKICAgICAgICAgIC0taGlnaGxpZ2h0OiAjMDAxZTJiOwogICAgICAgICAgLS1zdWNjZXNzOiAjMDBlZDY0OwogICAgICAgIH0KCiAgICAgICAgLyogdGhlc2Ugc3R5bGVzIG5lZWQgdG8gbGl2ZSBoZXJlIGJlY2F1c2UgdGhlIFNWRyBoYXMgYSBkaWZmZXJlbnQgc2NvcGUgKi8KICAgICAgICAuZG90cyB7CiAgICAgICAgICBhbmltYXRpb24tbmFtZTogbG9hZGVyOwogICAgICAgICAgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogZWFzZS1pbi1vdXQ7CiAgICAgICAgICBhbmltYXRpb24tZHVyYXRpb246IDNzOwogICAgICAgICAgYW5pbWF0aW9uLWl0ZXJhdGlvbi1jb3VudDogaW5maW5pdGU7CiAgICAgICAgICBhbmltYXRpb24tcGxheS1zdGF0ZTogdmFyKC0tYW5pbWF0aW9uLXN0YXRlKTsKICAgICAgICAgIHN0cm9rZTogI2ZmZjsKICAgICAgICAgIHN0cm9rZS13aWR0aDogMC41cHg7CiAgICAgICAgICB0cmFuc2Zvcm0tb3JpZ2luOiBjZW50ZXI7CiAgICAgICAgICBvcGFjaXR5OiAwOwogICAgICAgICAgcjogbWF4KDF2dywgMTFweCk7CiAgICAgICAgICBjeTogNTAlOwogICAgICAgICAgZmlsdGVyOiBzYXR1cmF0ZSgyKSBvcGFjaXR5KDAuODUpOwogICAgICAgICAgZmlsbDogdmFyKC0tdGVydGlhcnkpOwogICAgICAgIH0KCiAgICAgICAgLmRvdHM6bnRoLWNoaWxkKDIpIHsKICAgICAgICAgIGFuaW1hdGlvbi1kZWxheTogMC4xNXM7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoMykgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjNzOwogICAgICAgIH0KCiAgICAgICAgLmRvdHM6bnRoLWNoaWxkKDQpIHsKICAgICAgICAgIGFuaW1hdGlvbi1kZWxheTogMC40NXM7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoNSkgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjZzOwogICAgICAgIH0KCiAgICAgICAgQGtleWZyYW1lcyBsb2FkZXIgewogICAgICAgICAgMCUgewogICAgICAgICAgICBvcGFjaXR5OiAwOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDEpOwogICAgICAgICAgfQogICAgICAgICAgNDUlIHsKICAgICAgICAgICAgb3BhY2l0eTogMTsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgwLjcpOwogICAgICAgICAgfQogICAgICAgICAgNjUlIHsKICAgICAgICAgICAgb3BhY2l0eTogMTsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgwLjcpOwogICAgICAgICAgfQogICAgICAgICAgMTAwJSB7CiAgICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICAgIHRyYW5zZm9ybTogc2NhbGUoMSk7CiAgICAgICAgICB9CiAgICAgICAgfQogICAgICA8L3N0eWxlPgoKICAgICAgPGcgY2xhc3M9ImNvbnRhaW5lciI+CiAgICAgICAgPGNpcmNsZSBjbGFzcz0iZG90cyIgY3g9IjMwdnciLz4KICAgICAgICA8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNDB2dyIvPgogICAgICAgIDxjaXJjbGUgY2xhc3M9ImRvdHMiIGN4PSI1MHZ3Ii8+CiAgICAgICAgPGNpcmNsZSBjbGFzcz0iZG90cyIgY3g9IjYwdnciLz4KICAgICAgICA8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNzB2dyIvPgogICAgICA8L2c+CiAgICA8L3N2Zz4=" alt="loading" /> </div>
-
 
   const handleSubmit = (ev) => {
     if (!colorDiv) return setColorErr(true)
     const product = { color: colorDiv, token: user.token, uId: user._id, pId: productState._id }
     setColorDiv(ev)
     // dispatch(addToUCart(product))
+    axios.post(`${URL}/user/add-to-cart`, { pId: productState._id, uId: user._id })
     setSubmit(true)
   }
 
   const handleFavorite = () => {
-    // dispatch(favoriteS({ productId: productState._id, userId: user._id }));
+    setLoading(true)
+    axios.post(`${URL}/add-to-favorite`, { productId: productState._id, userId: user._id })
+    .then((res) => {
+        localStorage.setItem('user', JSON.stringify(res.data))
+        window.location.reload()} )
+    .catch(() => alert("somthing went wrong"))
   };
+
+  const handleCompare = () => {
+    setLoading(true)
+    axios.post(`${URL}/add-to-compare`, { productId: productState._id, userId: user._id })
+    .then((res) => {
+        localStorage.setItem('user', JSON.stringify(res.data))
+        window.location.reload()} )
+    .catch(() => alert("somthing went wrong"))
+  };
+
+  let fav = user?.favorite?.find(ev => {
+    return ev === productId
+      })
+
+  let com = user?.compare?.find(ev => {
+    return ev === productId
+      })
+      
 
   return (
     <div className="single-product container">
@@ -105,10 +138,14 @@ function SingleProduct() {
               </div>
               <p>  رنگ :</p>
                {productState.color.map((ev, i) => (
-                <div key={i}>
-                  <p>{ev.color}</p>
-                  <div onClick={() => setColorDiv(ev)} style={{ backgroundColor: ev.color }} className="single-product-color" />
-                  <p>{ev.name}</p>
+                <div key={i} className="d-flex" id="j-c">
+                  <div onClick={() => setColorDiv(ev)} style={{ backgroundColor: ev }} className="single-product-color" />
+                  <Fingerprint color={ev}/>
+                  <Fingerprint color={"success"} backgroundColor="success"/>
+                  <IconButton aria-label="fingerprint"  backgroundColor={ev}>
+                    <Fingerprint />
+                  </IconButton>
+                  <p>{ev}</p>
                 </div>
               ))} 
 
@@ -130,7 +167,7 @@ function SingleProduct() {
 
             {/* 1 - LOGIN  */}
 
-            <div className="single-product-add-to-cart-list">
+            <div className="single-product-add-to-cart-favorite">
 
               {user ?
                 <div className="single-product-add-to-cart-button">
@@ -145,38 +182,91 @@ function SingleProduct() {
                   <i className="fa fa-user" style={{ fontSize: "30px" }} />
                   <LoginModal name="login" />
                   <p>Favorite</p>
+                  <p>Favorite</p>
+                  <p>Favorite</p>
+                  <p>Favorite</p>
+                  <p>Favorite</p>
+                  <p>Favorite</p>
+                  <p>Favorite</p>
+
                 </div>
               }
 
               {user ?
                 <>
-                  {(1 === 2) ?
+                  {fav ?
+                  // YOU HAVE THE PRODUCT
                     <div className="single-product-add-to-cart-button d-flex">
                       <p className="blue" style={{ fontSize: 'small' }}> محصول در لیست شما است </p> &nbsp;
                       <p className="text-danger" style={{ fontSize: 'small' }} id="c-p" onClick={handleFavorite}> / حذف</p>
 
-                      {/* <button className="add-to-list-button"> */}
-                      {/* <FaHeart color="red" /> */}
-                      {/* </button> */}
+                       <button className="add-to-list-button"> 
+                       <FaHeart color="red" /> 
+                       </button> 
                     </div>
                     :
-                    // <div className="single-product-add-to-cart-button" id="ac">
-                    // <p style={{ color: 'blue', fontSize:'small'}}>افزودن به لیست من</p>
-                    <button className="add-to-list-button" style={{ fontSize: 'small', backgroundColor: 'white' }} onClick={handleFavorite}>مورد علاقه <FaHeart color="black" /></button>
-                    // </div>
+                  // DO NOT HAVE THE PRODUCT
+                     <div className="single-product-add-to-cart-button" id="ac">
+                     <p style={{ color: 'blue', fontSize:'small'}}>افزودن به لیست من</p>
+                    <button className="add-to-list-button" style={{ fontSize: 'small', backgroundColor: 'white' }} onClick={handleFavorite}>Add to Favorite List <FaHeart color="black" /></button>
+                     </div>
                   }
                 </>
                 :
+                // LOGIN - NOT ADD 
                 <div className="single-product-add-to-cart-button">
-                  <p>افزودن به لیست<br></br> علاقه مندی ها</p>
+                  <p>Add to<br></br>Favorite List</p>
                   <i className="fa fa-heart" style={{ fontSize: "30px" }} >
                     <LoginModal name="single-product-like" />
                   </i>
                 </div>
               }
+
+
+{user ?
+                <>
+                  {com ?
+                  // YOU HAVE THE PRODUCT
+                    <div className="single-product-add-to-cart-button d-flex">
+                      <p className="blue" style={{ fontSize: 'small' }}> محصول در لیست شما است </p> &nbsp;
+                      <p className="text-danger" style={{ fontSize: 'small' }} id="c-p" onClick={handleCompare}> / حذف</p>
+                       <button className="add-to-list-button"> 
+                       <FaCodeCompare color="red" /> 
+                       </button> 
+                    </div>
+                    :
+                  // DO NOT HAVE THE PRODUCT
+                  <>
+                  {loading ? 
+                    <h1>...</h1>
+                    :
+                     <div className="single-product-add-to-cart-button" id="ac">
+                     <p style={{ color: 'blue', fontSize:'small'}}>Add to Compare Product</p>
+                    <button className="add-to-list-button" style={{ fontSize: 'small', backgroundColor: 'white' }} onClick={handleCompare}>Add to Favorite List <FaCodeCompare color="black" /></button>
+                    </div>
+                  }
+                  </>
+
+                  }
+                </>
+                :
+                // LOGIN - NOT ADD 
+                <div className="single-product-add-to-cart-button">
+                  <p>Add to<br></br>Compare Product</p>
+                  <i className="fa fa-heart" style={{ fontSize: "30px" }} >
+                    <LoginModal name="single-product-like" />
+                  </i>
+                </div>
+              }
+
+
+
+
             </div>
           </div>
         </div>
+
+
         {/* END OF THE MAIN ------------------------------------------------------------------------------------------ */}
         {/* here outside of the main - this is the next line - hidden stuff (shoe more) */}
         <div className="container-fluid">

@@ -303,6 +303,7 @@ direction: rtl;
   color: blue;
 }
 
+
 /* 
 .back {
   width: 100px;
@@ -795,8 +796,8 @@ a {
 }
 
 .round-img img{
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   border-radius: ;
 }
@@ -964,14 +965,14 @@ footer:not(:first-child) {
 }
 
 .wishlist-icon {
-  top: 5%;
-  right: 20px;
+  /* top: 5%; */
+  /* right: 20px; */
 }
 
 .product-card-wishlist-login {
-  position: absolute;
-  top: 5%;
-  right: -20px;
+  /* position: absolute; */
+  /* top: 5%; */
+  /* right: -20px; */
 }
 
 .hidden {
@@ -1036,7 +1037,7 @@ footer:not(:first-child) {
 
 .product-image {
   width: 250px;
-  padding: 40px;
+  /* padding: 40px; */
 }
 
 .product-image img {
@@ -1050,10 +1051,9 @@ footer:not(:first-child) {
 
 .product-card-wish-icon {
   position: absolute;
-  z-index: 2;
+  /* z-index: 2; */
   cursor: pointer;
 }
-
 
 
 .description {
@@ -1249,6 +1249,14 @@ footer:not(:first-child) {
 
 .product-details {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.oh{
+  background-color: rgb(0, 128, 64);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 0 10px; */
 }
 
 /* Login SignUp Forgot  */

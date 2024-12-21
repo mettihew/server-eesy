@@ -45,7 +45,7 @@ export default function DrawerBasic() {
           <Divider />
           <List sx={{direction: 'ltr'}}>
             {/* {['Products', 'Account', 'Add-Product'].map((text) => ( */}
-            {['products', 'cart'].map((text) => (
+            {['products', 'cart', 'test'].map((text) => (
               <ListItem key={text}>
                 <a href={`/${text}`}>{text}</a>
               </ListItem>

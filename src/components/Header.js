@@ -1,10 +1,10 @@
 
-import { Link} from "react-router-dom";
+import { a} from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom'
 import { BsSearch } from "react-icons/bs";
 import compare from "../images/compare.svg";
-import wishlist from "../images/wishlist.svg";
+import favorite from "../images/wishlist.svg";
 import userSVG from "../images/user.svg";
 import cart from "../images/cart.svg";
 import Drawer from '../components/Drawer'
@@ -95,61 +95,24 @@ function Header() {
         {/* links that have icons */}
           <div className="header-link-that-have-icons">
 
-            <div>
-              <Link
-                to="/compare-product"
-                className="d-flex align-items-center gap-10 text-white"
-              >
-                <img src={compare} alt="compare" />
-                <p className="mb-0 ">
-                  Compare
-                  <br /> Products
-                </p>
-              </Link>
-            </div>
-            <div>
-              <Link
-                to="/wishlist"
-                className="d-flex align-items-center gap-10 text-white"
-              >
-                <img src={wishlist} alt="wishlist" />
-                <p className="mb-0">
-                  Favorite<br /> Your List
-                </p>
-              </Link>
-            </div>
-            <div>
-              <Link
-                to="/login"
-                className="d-flex align-items-center gap-10 text-white"
-              >
-                <img src={userSVG} alt="user" />
-                {!user && (
-                  <p className="mb-0">
-                Log in<br /> My Account
-                  </p>
-                )}
-                {user && (
-                  <p className="mb-0">
-                    Welcom<br />dear {user.name}
-                  </p>
-                )}
-              </Link>
-            </div>
+              <a href="/compare-product"className="d-flex align-items-center gap-10 text-white"> <img src={compare} alt="compare" /><p className="mb-0 ">Compare<br /> Products</p> </a>
+              <a href="/favorite" className="d-flex align-items-center gap-10 text-white" > <img src={favorite} alt="favorite" /> <p className="mb-0"> Favorites </p> </a>
+              {/* <a href="/favorite" className="d-flex align-items-center gap-10 text-white" > <img src={favorite} alt="favorite" /> <p className="mb-0"> Favorite<br /> Your List </p> </a> */}
+              <a href="/login" className="d-flex align-items-center gap-10 text-white"><img src={userSVG} alt="user" />
 
-            <div>
-              <Link to="/cart" className="d-flex align-items-center gap-10 text-white">
-                <div className="d-flex flex-column ">
-                  <span className="badge bg-white text-dark">
-                    {userState.length ? userState.length : 0}
-                  </span>
+              {!user && <p className="mb-0">Log in<br /> My Account</p>}
+              {user && <p className="mb-0">Welcom<br />dear {user.name}</p>} </a>
+
+              <a href="/cart" className="d-flex align-items-center gap-10 text-white">
+                <div className="d-flex flex-column">
+                  <span className="badge bg-white text-dark">{userState.length ? userState.length : 0}</span>
                   <p className="mb-0" > {tAmount ? tAmount : 0} $</p>
                 </div>
-
                 <img src={cart} alt="cart" />
-              </Link>
-            </div>
-        </div>
+              </a>
+
+
+          </div>
       </div>
 
 

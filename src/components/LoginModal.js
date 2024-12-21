@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { FaHeart, FaUser } from 'react-icons/fa'
 import wish from "../images/wish.svg";
+import axios from 'axios'
+import { URL } from '../utils/URL';
 
 const style = {
   position: 'absolute',
@@ -32,6 +34,11 @@ const loginHandler = () => {
   const email = emailRef.current.value
   const password = passwordRef.current.value
   // dispatch(login({email, password}));
+  axios.post(`${URL}/login`, {email, password})
+  .then((res) => {
+      localStorage.setItem('user', JSON.stringify(res.data))
+      window.location.reload()} )
+  .catch(() => alert('problem'))
 }
 
   return (

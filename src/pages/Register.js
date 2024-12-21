@@ -5,6 +5,7 @@ import {useFormik} from "formik"
 import {ToastContainer, toast} from "react-toastify"
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { URL } from '../utils/URL'
 
 function Register() {
   const navigate = useNavigate()
@@ -26,11 +27,12 @@ function Register() {
       password2: ""
     },
     validationSchema: schema,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       setSpin(true)
       if (values.password === values.password2){
-        axios.post(`${URL}/user/register`, {values})
-      //  await dispatch(register(values))
+      axios.post(`${URL}/register`, values)
+      .then(() => window.location.href = "/login")
+      .catch(er => alert(er))
        setSpin(false)
       }else{
         toast.error("Your password is not match")
@@ -62,9 +64,10 @@ function Register() {
         <input type='password' placeholder='repeat password' onChange={formik.handleChange("password2")} value={formik.values.password2}/>
 
 
-        <button id='button'>
+        <button id='button' type='submit'>
           {Spin ? <Spinner /> : <p>Register</p> }
-          </button> 
+        </button> 
+
         <ToastContainer />
         <a href={`/login`}>login</a>
     </form>

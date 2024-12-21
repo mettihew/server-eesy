@@ -14,7 +14,7 @@ import Search from "./pages/Search"
 import NotFound from "./components/NotFound"
 import Category from "./pages/Category"
 import Categories from "./pages/Categories"
-import Wish from "./pages/Wish"
+import Favorite from "./pages/Favorite"
 import CompareProduct from "./pages/CompareProduct"
 import Test from "./components/Test"
 
@@ -35,7 +35,7 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/category" element={<Category />} />
         <Route path="/categories" element={<Categories />} />
-        <Route path="/wishlist" element={<Wish />} />
+        <Route path="/favorite" element={<Favorite />} />
         <Route path="/compare-product" element={<CompareProduct />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
