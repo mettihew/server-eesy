@@ -206,7 +206,8 @@ app.post("/user/cart", async (req, res) => {
 });
 
 mongoose
-  .connect(process.env.MONGO_URL)
+ // .connect(process.env.MONGO_URL)
+  .connect('mongodb+srv://Jeff-Bezos:ohShit1234@cluster0.qwfgcrz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   .then(console.log("Connected to MongoDB"))
   .catch((er) => console.log(er));
 
