@@ -23,7 +23,8 @@ function App() {
     <BrowserRouter basename="/">
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<h1 id="j-c">Home</h1>} />
+        {/* <Route path="/" element={<Home />} /> */}
         <Route path="/products" element={<Products />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

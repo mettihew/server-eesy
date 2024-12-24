@@ -1,5 +1,4 @@
 
-import { a} from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom'
 import { BsSearch } from "react-icons/bs";
@@ -96,18 +95,15 @@ function Header() {
           <div className="header-link-that-have-icons">
 
               <a href="/compare-product"className="d-flex align-items-center gap-10 text-white"> <img src={compare} alt="compare" /><p className="mb-0 ">Compare<br /> Products</p> </a>
-              <a href="/favorite" className="d-flex align-items-center gap-10 text-white" > <img src={favorite} alt="favorite" /> <p className="mb-0"> Favorites </p> </a>
-              {/* <a href="/favorite" className="d-flex align-items-center gap-10 text-white" > <img src={favorite} alt="favorite" /> <p className="mb-0"> Favorite<br /> Your List </p> </a> */}
+              {/* <a href="/favorite" className="d-flex align-items-center gap-10 text-white" > <img src={favorite} alt="favorite" /> <p className="mb-0"> Favorites </p> </a> */}
+              <a href="/favorite" className="d-flex align-items-center gap-10 text-white" > <img src={favorite} alt="favorite" /> <p className="mb-0"> Favorite<br /> Your List </p> </a>
               <a href="/login" className="d-flex align-items-center gap-10 text-white"><img src={userSVG} alt="user" />
 
               {!user && <p className="mb-0">Log in<br /> My Account</p>}
-              {user && <p className="mb-0">Welcom<br />dear {user.name}</p>} </a>
+              {user && <p className="mb-0">Welcom<br />dear, {user.name}</p>} </a>
 
-              <a href="/cart" className="d-flex align-items-center gap-10 text-white">
-                <div className="d-flex flex-column">
-                  <span className="badge bg-white text-dark">{userState.length ? userState.length : 0}</span>
-                  <p className="mb-0" > {tAmount ? tAmount : 0} $</p>
-                </div>
+              <a href="/cart" className="cart-img">
+                <span className="badge" style={{marginBottom:'-5px', marginLeft:'8px'}}>{userState.length ? userState.length : 0}</span>
                 <img src={cart} alt="cart" />
               </a>
 

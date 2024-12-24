@@ -13,11 +13,11 @@ function LeftMenuProducts(props) {
   const search = window.location.search;
   const arr = search.split("&")
   for(let k in arr){
-    if(arr[k].includes("k")) key = arr[k].split("=")[1]
-    if(arr[k].includes("sort")) urlSort = arr[k].split("=")[1]
-    if(arr[k].includes("cat")) cat = arr[k].split("=")[1]
-    if(arr[k].includes("min_price")) urlMinPrice = arr[k].split("=")[1]
-    if(arr[k].includes("max_price")) urlMaxPrice = arr[k].split("=")[1]
+    if(arr[k].includes("k=")) key = arr[k].split("=")[1]
+    if(arr[k].includes("sort=")) urlSort = arr[k].split("=")[1]
+    if(arr[k].includes("cat=")) cat = arr[k].split("=")[1]
+    if(arr[k].includes("min_price=")) urlMinPrice = arr[k].split("=")[1]
+    if(arr[k].includes("max_price=")) urlMaxPrice = arr[k].split("=")[1]
   }
 
 

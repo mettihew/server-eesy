@@ -11,53 +11,66 @@ import ProductCard from "../components/ProductCard";
 import axios from "axios";
 import { URL } from "../utils/URL";
 import { FaAngleDoubleRight } from "react-icons/fa";
-import Fingerprint from '@mui/icons-material/Fingerprint';
-import IconButton from '@mui/material/IconButton';
-
-
 
 function SingleProduct() {
   const [colorDiv, setColorDiv] = useState()
-  const [submit, setSubmit] = useState(false)
   const [showMore, setShowMore] = useState(false)
   const [colorErr, setColorErr] = useState(false)
   const location = useLocation()
-  const productId = location.pathname.split("/")[2]
+  const pId = location.pathname.split("/")[2]
   const [similar, setSimilar] = useState()
   const [loading, setLoading] = useState(false)
 
-  const [productState, setP] = useState(null)
+  const [data, setData] = useState(null)
+  const [inCart, setInCart] = useState()
   const user = JSON.parse(localStorage.getItem('user'))
 
   useEffect(() => {
-    if(!productState){
-     axios.get(`${URL}/product/${productId}`)
-    .then(res => setP(res.data))
+    // GET THE PRODUCT
+    if(!data){
+     axios.get(`${URL}/product/${pId}`)
+    .then(res => setData(res.data))
     .catch(er => alert(er))
+
+    // IS THE PRODUCT IN MY CART?
+    const user = JSON.parse(localStorage.getItem('user'))
+    const uId = user._id
+    axios.post(`${URL}/get-one-from-cart`, {pId, uId})
+    .then(res => setInCart(res.data))
+    .catch(er => alert(er))
+
+    // MAKING HISTORY
+    axios.post(`${URL}/add-history`, {pId, uId})
+    .then((res) => localStorage.setItem('user', JSON.stringify(res.data)))
     }
 
-    //similar 
-    if(productState){
-       axios.post(`${URL}/home-cat`, {category: productState.category})
+    //similar products
+    if(data){
+       axios.post(`${URL}/home-cat`, {category: data.category})
       .then((res) => setSimilar(res.data))
     }
-  }, [productState])
+  }, [data])
 
+  if (!data) return <div id="j-c"> <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHN0eWxlPSItLWFuaW1hdGlvbi1zdGF0ZTogcnVubmluZzsiPgogICAgICA8c3R5bGU+CiAgICAgICAgOnJvb3QgewogICAgICAgICAgLS1hbmltYXRpb24tc3RhdGU6IHBhdXNlZDsKICAgICAgICB9CgogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgd2hlcmUgdGhlICJyZWd1bGFyIiBzY2hlbWUgaXMgZGFyayAqLwogICAgICAgIDpyb290IHsKICAgICAgICAgIC0tcHJpbWFyeTogI2Y5ZmJmYTsKICAgICAgICAgIC0tc2Vjb25kYXJ5OiAjMDAxZTJiOwogICAgICAgICAgLS10ZXJ0aWFyeTogIzAwZWQ2NDsKICAgICAgICAgIC0taGlnaGxpZ2h0OiAjMDAxZTJiOwogICAgICAgICAgLS1zdWNjZXNzOiAjMDBlZDY0OwogICAgICAgIH0KCiAgICAgICAgLyogdGhlc2Ugc3R5bGVzIG5lZWQgdG8gbGl2ZSBoZXJlIGJlY2F1c2UgdGhlIFNWRyBoYXMgYSBkaWZmZXJlbnQgc2NvcGUgKi8KICAgICAgICAuZG90cyB7CiAgICAgICAgICBhbmltYXRpb24tbmFtZTogbG9hZGVyOwogICAgICAgICAgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogZWFzZS1pbi1vdXQ7CiAgICAgICAgICBhbmltYXRpb24tZHVyYXRpb246IDNzOwogICAgICAgICAgYW5pbWF0aW9uLWl0ZXJhdGlvbi1jb3VudDogaW5maW5pdGU7CiAgICAgICAgICBhbmltYXRpb24tcGxheS1zdGF0ZTogdmFyKC0tYW5pbWF0aW9uLXN0YXRlKTsKICAgICAgICAgIHN0cm9rZTogI2ZmZjsKICAgICAgICAgIHN0cm9rZS13aWR0aDogMC41cHg7CiAgICAgICAgICB0cmFuc2Zvcm0tb3JpZ2luOiBjZW50ZXI7CiAgICAgICAgICBvcGFjaXR5OiAwOwogICAgICAgICAgcjogbWF4KDF2dywgMTFweCk7CiAgICAgICAgICBjeTogNTAlOwogICAgICAgICAgZmlsdGVyOiBzYXR1cmF0ZSgyKSBvcGFjaXR5KDAuODUpOwogICAgICAgICAgZmlsbDogdmFyKC0tdGVydGlhcnkpOwogICAgICAgIH0KCiAgICAgICAgLmRvdHM6bnRoLWNoaWxkKDIpIHsKICAgICAgICAgIGFuaW1hdGlvbi1kZWxheTogMC4xNXM7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoMykgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjNzOwogICAgICAgIH0KCiAgICAgICAgLmRvdHM6bnRoLWNoaWxkKDQpIHsKICAgICAgICAgIGFuaW1hdGlvbi1kZWxheTogMC40NXM7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoNSkgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjZzOwogICAgICAgIH0KCiAgICAgICAgQGtleWZyYW1lcyBsb2FkZXIgewogICAgICAgICAgMCUgewogICAgICAgICAgICBvcGFjaXR5OiAwOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDEpOwogICAgICAgICAgfQogICAgICAgICAgNDUlIHsKICAgICAgICAgICAgb3BhY2l0eTogMTsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgwLjcpOwogICAgICAgICAgfQogICAgICAgICAgNjUlIHsKICAgICAgICAgICAgb3BhY2l0eTogMTsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgwLjcpOwogICAgICAgICAgfQogICAgICAgICAgMTAwJSB7CiAgICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICAgIHRyYW5zZm9ybTogc2NhbGUoMSk7CiAgICAgICAgICB9CiAgICAgICAgfQogICAgICA8L3N0eWxlPgoKICAgICAgPGcgY2xhc3M9ImNvbnRhaW5lciI+CiAgICAgICAgPGNpcmNsZSBjbGFzcz0iZG90cyIgY3g9IjMwdnciLz4KICAgICAgICA8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNDB2dyIvPgogICAgICAgIDxjaXJjbGUgY2xhc3M9ImRvdHMiIGN4PSI1MHZ3Ii8+CiAgICAgICAgPGNpcmNsZSBjbGFzcz0iZG90cyIgY3g9IjYwdnciLz4KICAgICAgICA8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNzB2dyIvPgogICAgICA8L2c+CiAgICA8L3N2Zz4=" alt="loading" /> </div>
 
-  if (!productState) return <div id="j-c"> <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHN0eWxlPSItLWFuaW1hdGlvbi1zdGF0ZTogcnVubmluZzsiPgogICAgICA8c3R5bGU+CiAgICAgICAgOnJvb3QgewogICAgICAgICAgLS1hbmltYXRpb24tc3RhdGU6IHBhdXNlZDsKICAgICAgICB9CgogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgd2hlcmUgdGhlICJyZWd1bGFyIiBzY2hlbWUgaXMgZGFyayAqLwogICAgICAgIDpyb290IHsKICAgICAgICAgIC0tcHJpbWFyeTogI2Y5ZmJmYTsKICAgICAgICAgIC0tc2Vjb25kYXJ5OiAjMDAxZTJiOwogICAgICAgICAgLS10ZXJ0aWFyeTogIzAwZWQ2NDsKICAgICAgICAgIC0taGlnaGxpZ2h0OiAjMDAxZTJiOwogICAgICAgICAgLS1zdWNjZXNzOiAjMDBlZDY0OwogICAgICAgIH0KCiAgICAgICAgLyogdGhlc2Ugc3R5bGVzIG5lZWQgdG8gbGl2ZSBoZXJlIGJlY2F1c2UgdGhlIFNWRyBoYXMgYSBkaWZmZXJlbnQgc2NvcGUgKi8KICAgICAgICAuZG90cyB7CiAgICAgICAgICBhbmltYXRpb24tbmFtZTogbG9hZGVyOwogICAgICAgICAgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogZWFzZS1pbi1vdXQ7CiAgICAgICAgICBhbmltYXRpb24tZHVyYXRpb246IDNzOwogICAgICAgICAgYW5pbWF0aW9uLWl0ZXJhdGlvbi1jb3VudDogaW5maW5pdGU7CiAgICAgICAgICBhbmltYXRpb24tcGxheS1zdGF0ZTogdmFyKC0tYW5pbWF0aW9uLXN0YXRlKTsKICAgICAgICAgIHN0cm9rZTogI2ZmZjsKICAgICAgICAgIHN0cm9rZS13aWR0aDogMC41cHg7CiAgICAgICAgICB0cmFuc2Zvcm0tb3JpZ2luOiBjZW50ZXI7CiAgICAgICAgICBvcGFjaXR5OiAwOwogICAgICAgICAgcjogbWF4KDF2dywgMTFweCk7CiAgICAgICAgICBjeTogNTAlOwogICAgICAgICAgZmlsdGVyOiBzYXR1cmF0ZSgyKSBvcGFjaXR5KDAuODUpOwogICAgICAgICAgZmlsbDogdmFyKC0tdGVydGlhcnkpOwogICAgICAgIH0KCiAgICAgICAgLmRvdHM6bnRoLWNoaWxkKDIpIHsKICAgICAgICAgIGFuaW1hdGlvbi1kZWxheTogMC4xNXM7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoMykgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjNzOwogICAgICAgIH0KCiAgICAgICAgLmRvdHM6bnRoLWNoaWxkKDQpIHsKICAgICAgICAgIGFuaW1hdGlvbi1kZWxheTogMC40NXM7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoNSkgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjZzOwogICAgICAgIH0KCiAgICAgICAgQGtleWZyYW1lcyBsb2FkZXIgewogICAgICAgICAgMCUgewogICAgICAgICAgICBvcGFjaXR5OiAwOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDEpOwogICAgICAgICAgfQogICAgICAgICAgNDUlIHsKICAgICAgICAgICAgb3BhY2l0eTogMTsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgwLjcpOwogICAgICAgICAgfQogICAgICAgICAgNjUlIHsKICAgICAgICAgICAgb3BhY2l0eTogMTsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgwLjcpOwogICAgICAgICAgfQogICAgICAgICAgMTAwJSB7CiAgICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICAgIHRyYW5zZm9ybTogc2NhbGUoMSk7CiAgICAgICAgICB9CiAgICAgICAgfQogICAgICA8L3N0eWxlPgoKICAgICAgPGcgY2xhc3M9ImNvbnRhaW5lciI+CiAgICAgICAgPGNpcmNsZSBjbGFzcz0iZG90cyIgY3g9IjMwdnciLz4KICAgICAgICA8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNDB2dyIvPgogICAgICAgIDxjaXJjbGUgY2xhc3M9ImRvdHMiIGN4PSI1MHZ3Ii8+CiAgICAgICAgPGNpcmNsZSBjbGFzcz0iZG90cyIgY3g9IjYwdnciLz4KICAgICAgICA8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNzB2dyIvPgogICAgICA8L2c+CiAgICA8L3N2Zz4=" alt="loading" /> </div>
-
-  const handleSubmit = (ev) => {
+  const addHandler = (ev) => {
     if (!colorDiv) return setColorErr(true)
-    const product = { color: colorDiv, token: user.token, uId: user._id, pId: productState._id }
     setColorDiv(ev)
-    // dispatch(addToUCart(product))
-    axios.post(`${URL}/user/add-to-cart`, { pId: productState._id, uId: user._id })
-    setSubmit(true)
+    axios.post(`${URL}/add-to-cart`, { pId: data._id, uId: user._id })
+    .then(res => setData(res.data))
+    .catch(() => alert('we have problem adding the product'))
+  }
+
+  const removeHandler = () => {
+    axios.post(`${URL}/remove-from-cart`, { pId: data._id, uId: user._id })
+    .then(res => setData(res.data))
+    .catch(() => alert('we have problem removing the product'))
+
   }
 
   const handleFavorite = () => {
     setLoading(true)
-    axios.post(`${URL}/add-to-favorite`, { productId: productState._id, userId: user._id })
+    axios.post(`${URL}/add-to-favorite`, { pId: data._id, userId: user._id })
     .then((res) => {
         localStorage.setItem('user', JSON.stringify(res.data))
         window.location.reload()} )
@@ -66,7 +79,7 @@ function SingleProduct() {
 
   const handleCompare = () => {
     setLoading(true)
-    axios.post(`${URL}/add-to-compare`, { productId: productState._id, userId: user._id })
+    axios.post(`${URL}/add-to-compare`, { pId: data._id, userId: user._id })
     .then((res) => {
         localStorage.setItem('user', JSON.stringify(res.data))
         window.location.reload()} )
@@ -74,11 +87,11 @@ function SingleProduct() {
   };
 
   let fav = user?.favorite?.find(ev => {
-    return ev === productId
+    return ev === pId
       })
 
   let com = user?.compare?.find(ev => {
-    return ev === productId
+    return ev === pId
       })
       
 
@@ -94,7 +107,7 @@ function SingleProduct() {
           <FaAngleRight color="gray" size="12px" />
           <a href={`/products`} >Products</a>
           <FaAngleRight color="gray" size="12px" />
-          <a href={`/products/${productState.category}`} >{productState.category}</a>
+          <a href={`/products/${data.category}`} >{data.category}</a>
           <FaAngleRight color="gray" size="12px" />
         </div>
 
@@ -103,9 +116,9 @@ function SingleProduct() {
 
           {/* 3 - images */}
           <div className="single-product-images">
-              <Zoom><img alt="title" src={productState.images.title} width={"340px"} /></Zoom>
+              <Zoom><img alt="title" src={data.images.title} width={"340px"} /></Zoom>
             <div className="single-product-images-others-div">
-              {productState.images.others.map((ev, i) => (
+              {data.images.others.map((ev, i) => (
                  <Zoom key={i}><img alt="others"src={ev} className="others"/></Zoom> 
               ))} 
             </div>
@@ -117,11 +130,11 @@ function SingleProduct() {
             {/* 2 - ALL THE INFORMATION AND DETAILS ABOUT THE PRODUCT THAT YOU CAN SEE */}
             <div className="single-product-all-the-information-and-details">
 
-              <h4 className="name-width">{productState.name}</h4>
-              {productState.en_name && <p className="name-width">{productState.en_name}</p>}
+              <h4 className="name-width">{data.name}</h4>
+              {data.en_name && <p className="name-width">{data.en_name}</p>}
 
               <div className="blue">
-                <p> برند  : {productState.brand} </p>
+                <p> برند  : {data.brand} </p>
 
                 <div id="a-c">
                   <p style={{ color: 'yellow', marginRight: '5px' }}></p>
@@ -134,17 +147,12 @@ function SingleProduct() {
               </div>
               <div>
                 <p>  قیمت :</p>
-                <h5 className="text-danger">تومان {productState.price}</h5>
+                <h5 className="text-danger">تومان {data.price}</h5>
               </div>
               <p>  رنگ :</p>
-               {productState.color.map((ev, i) => (
+               {data.color.map((ev, i) => (
                 <div key={i} className="d-flex" id="j-c">
                   <div onClick={() => setColorDiv(ev)} style={{ backgroundColor: ev }} className="single-product-color" />
-                  <Fingerprint color={ev}/>
-                  <Fingerprint color={"success"} backgroundColor="success"/>
-                  <IconButton aria-label="fingerprint"  backgroundColor={ev}>
-                    <Fingerprint />
-                  </IconButton>
                   <p>{ev}</p>
                 </div>
               ))} 
@@ -159,8 +167,8 @@ function SingleProduct() {
               <p>. Imported</p>
               <p>. Lace Up closure</p>
               <p>. Machine Wash</p>
-              {/* <p>{productState[0]?.description}</p> */}
-              <p>{productState.feauture}</p>
+              {/* <p>{data[0]?.description}</p> */}
+              <p>{data.feauture}</p>
             </div>
 
             {/* the end of the single-product-login-and-all-the-information" */}
@@ -174,8 +182,19 @@ function SingleProduct() {
                   {(!colorDiv) && !colorErr && <p>Select color first</p>}
                   {colorErr && !colorDiv && <p className="text-danger">Select color first</p>}
                   {(colorDiv) && <p className="text-success">Order</p>}
-                  {submit ? <a href={`/cart`}> <i className="fa fa-shopping-cart" style={{ fontSize: "30px" }} /> </a> :
-                    <button className="add-to-cart-button" type="submit" onClick={handleSubmit}>Add to Your Cart</button>}
+                 {inCart ? 
+                 <div id="j-c">
+                  <button onClick={removeHandler} style={{width:'40px'}}>-</button>
+                  <h1>{inCart?.quantity}</h1>
+                  <button onClick={addHandler} style={{width:'40px'}}>+</button>
+                  </div>
+                 : 
+                 <>
+                    <button className="add-to-cart-button" type="submit" onClick={addHandler}>Add to Your Cart
+                 <a href={`/cart`}> <i className="fa fa-shopping-cart" style={{ fontSize: "30px" }} /> </a> 
+                    </button>
+                 </>
+                  }
                 </div>
                 :
                 <div className="single-product-add-to-cart-button">
@@ -196,9 +215,9 @@ function SingleProduct() {
                 <>
                   {fav ?
                   // YOU HAVE THE PRODUCT
-                    <div className="single-product-add-to-cart-button d-flex">
-                      <p className="blue" style={{ fontSize: 'small' }}> محصول در لیست شما است </p> &nbsp;
-                      <p className="text-danger" style={{ fontSize: 'small' }} id="c-p" onClick={handleFavorite}> / حذف</p>
+                    <div className="single-product-add-to-cart-button d-flex" id="j-c">
+                      <p className="blue" style={{ fontSize: 'small' }}> In your favorite list </p> &nbsp;
+                      <p className="text-danger" style={{ fontSize: 'small' }} id="c-p" onClick={handleFavorite}> / delete &nbsp;</p>
 
                        <button className="add-to-list-button"> 
                        <FaHeart color="red" /> 
@@ -228,7 +247,7 @@ function SingleProduct() {
                   {com ?
                   // YOU HAVE THE PRODUCT
                     <div className="single-product-add-to-cart-button d-flex">
-                      <p className="blue" style={{ fontSize: 'small' }}> محصول در لیست شما است </p> &nbsp;
+                      <a href="compare-product" className="blue" style={{ fontSize: 'small' }}>In Compare</a> &nbsp;
                       <p className="text-danger" style={{ fontSize: 'small' }} id="c-p" onClick={handleCompare}> / حذف</p>
                        <button className="add-to-list-button"> 
                        <FaCodeCompare color="red" /> 
@@ -261,7 +280,6 @@ function SingleProduct() {
 
 
 
-
             </div>
           </div>
         </div>
@@ -273,34 +291,27 @@ function SingleProduct() {
           {showMore ? <p id="c-p" onClick={() => setShowMore(false)} ><FaAngleUp />Close</p> : <p className="blue single-product-show-more" onClick={() => setShowMore(true)}>See more detail</p>}
         </div>
 
-
+{showMore &&
           <div id='d-g' className="single-product-text-align p-5">
-
             <div style={{ padding: "30px 0" }} className="border-bottom-global" />
 
-            <h5 style={{ marginTop: '50px' }}>وزن</h5>
-            <p className="p-3" style={{ marginRight: '170px' }}>{productState.weight} گرم</p>
+            <h5 style={{ marginTop: '50px' }}>weight</h5>
+            <p className="p-3" style={{ marginRight: '170px' }}>{data.weight} weight</p>
 
-            <h5 style={{ marginTop: '50px' }}>ارتفاع</h5>
-            <p className="p-3" style={{ marginRight: '170px' }}>{productState.height} سانتی‌متر</p>
+            <h5 style={{ marginTop: '50px' }}>height</h5>
+            <p className="p-3" style={{ marginRight: '170px' }}>{data.height} height</p>
 
-            <h5 style={{ marginTop: '50px' }}>ویژگی‌ها</h5>
-            <p className="p-3" style={{ marginRight: '170px' }}>{productState.feature} </p>
-
-            <h5 style={{ marginTop: '50px' }}>عمق</h5>
-            <p className="p-3" style={{ marginRight: '170px' }}>{productState.depth} سانتی‌متر</p>
-
-            <h5 style={{ marginTop: '50px' }}>شناسه</h5>
-            <p className="p-3" style={{ marginRight: '170px' }}>{productState.index} </p>
-
+            <h5 style={{ marginTop: '50px' }}>depth</h5>
+            <p className="p-3" style={{ marginRight: '170px' }}>{data.depth} depth </p>
           </div>
+}
 
         {/* MEN AND REVIEW / THE LAST THINGS IN THE PAGE */}
         {/* men  */}
         <p style={{ paddingTop: "10px", paddingBottom: "10px", marginLeft: "30px", }} className="border-bottom-global" />
 
         <div id="t-a-c">
-          <img src={productState.images.special} alt="" width="80%" />
+          <img src={data.images.special} alt="special" width="80%" />
         </div>
 
         <div className="m-4">
@@ -344,7 +355,7 @@ function SingleProduct() {
                 <div className="align" style={{ borderBottom: "1px solid grey", paddingBottom: "30px" }}>
                   <i className="fa fa-arrow-left" />
                   <div className="test">
-                    {productState.images.others.map((ev,i) => (
+                    {data.images.others.map((ev,i) => (
                   <Zoom key={i} ><img alt="person" src={ev} className="personal-images"/></Zoom> 
                      ))} 
                   </div>
@@ -415,7 +426,7 @@ function SingleProduct() {
                       </div>
                     </form>
 
-                    {/* {productState.review.map(ev =>
+                    {/* {data.review.map(ev =>
                       <div key={Math.random()}>
                         <div className="d-flex align-items-center gap-10">
                           <h6 className="mb-0">{ev.userName}</h6>
@@ -436,7 +447,7 @@ function SingleProduct() {
           <section className="popular-wrapper py-5 home-wrapper-2">
               {similar &&
       <section className="container-fluid py-4 gray">
-       {/* {productState && <h4 className="py-4">{productState?.category}s</h4> } */}
+       {/* {data && <h4 className="py-4">{data?.category}s</h4> } */}
 
         <div className="product-card-body">
           {similar?.map((ev) => (
