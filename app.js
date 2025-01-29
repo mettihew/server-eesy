@@ -379,7 +379,7 @@ app.get('/get-ip', async(req, res) => {
 });
 
 mongoose
-  .connect("mongodb+srv://Youtube:YoutubeBitches@cluster0.qwfgcrz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+  .connect(process.env.MONGO_URL)
   .then(console.log("Connected to MongoDB"))
   .catch((er) => console.log(er)); 
 
