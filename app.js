@@ -20,6 +20,10 @@ app.use(morgan("dev"));
 const Product = require("./models/productModel");
 const Issue = require("./models/issueModel");
 
+app.get("/", async(req, res) => {
+  res.json("OK")
+})
+
 app.post("/home-cat", async (req, res) => {
   try {
     const cat = await Product.find(req.body).limit(4);
@@ -525,9 +529,15 @@ app.post("/get-compare", async (req, res) => {
 // });
 
 app.post("/get-history", async (req, res) => {
-  const { history } = req.body;
-  const get = await Product.find({ _id: history }).limit(4)
-  res.json(get);
+  try{
+    const { history } = req.body;
+    console.log("this is history = ", history);
+    
+    const get = await Product.find({ _id: history }).limit(4)
+    res.json(get);
+  } catch(err){
+    return res.status(500).json(err.message)
+  }
 });
 
 ////////////user location
@@ -541,9 +551,10 @@ app.get("/get-ip", async (req, res) => {
   res.json(ip);
 });
 
+
 mongoose
   .connect(process.env.MONGO_URL)
   .then(console.log("Connected to MongoDB"))
   .catch((er) => console.log(er));
 
-app.listen(4009, console.log("Connected to 4000"));
+app.listen(4010, console.log("Connected to 4000"));
