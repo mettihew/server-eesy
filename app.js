@@ -367,6 +367,20 @@ app.post("/add-to-cart", async (req, res) => {
   }
 });
 
+app.post("/add-local-to-cart", async (req, res) => {
+  try {
+    const { uId, cartLocal } = req.body;
+    const add = await User.findByIdAndUpdate(
+      uId,
+      { $push: { cart:  cartLocal  } },
+      { new: true }
+    );
+    res.json(add);
+  } catch (err) {
+    return res.status(500).json(err.message);
+  }
+});
+
 app.post("/review", async (req, res) => {
   let { uId, pId, review, rating } = req.body;
   await Product.findByIdAndUpdate(
@@ -396,6 +410,12 @@ app.post("/increase-cart", async (req, res) => {
   }
 });
 
+app.post("/get-cart-length", async (req, res) => {
+  const { uId } = req.body;
+    const user = await User.findOne({ _id: uId })
+    res.json(user.cart.length)
+});
+
 app.post("/get-cart", async (req, res) => {
   const { uId } = req.body;
   try {
@@ -405,6 +425,21 @@ app.post("/get-cart", async (req, res) => {
       arr.push(ev.pId);
     });
     const find = await Product.find({ _id: arr });
+    res.json(find);
+  } catch (err) {
+    return res.status(500).json(err.message);
+  }
+});
+
+app.post("/get-cart-local", async (req, res) => {
+  const { cartLocal } = req.body;
+  try {
+    let arr = [];
+    cartLocal.map((ev) => {
+      arr.push(ev.pId);
+    });
+    const find = await Product.find({ _id: arr });
+    console.log('find', find);
     res.json(find);
   } catch (err) {
     return res.status(500).json(err.message);
@@ -531,8 +566,6 @@ app.post("/get-compare", async (req, res) => {
 app.post("/get-history", async (req, res) => {
   try{
     const { history } = req.body;
-    console.log("this is history = ", history);
-    
     const get = await Product.find({ _id: history }).limit(4)
     res.json(get);
   } catch(err){
@@ -557,4 +590,4 @@ mongoose
   .then(console.log("Connected to MongoDB"))
   .catch((er) => console.log(er));
 
-app.listen(4010, console.log("Connected to 4000"));
+app.listen(4012, console.log("Connected to 4000"));
